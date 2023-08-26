@@ -31,6 +31,7 @@ const PokemonCard: React.FC<PokemonCardProps> = ({
         name={data.name}
         favoritedPokemon={favoritedPokemon}
         onFavoriteClick={handleFavoriteClick}
+        className="p-5 sm:p-2"
       />
       <div
         className="flex flex-col items-center py-3"

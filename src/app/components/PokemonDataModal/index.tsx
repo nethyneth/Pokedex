@@ -76,10 +76,10 @@ const PokemonDataModal: React.FC<ModalProps> = ({
   return (
     <div className="modal-overlay" onClick={handleCloseClick}>
       <div
-        className="modal-wrapper grid grid-cols-12 bg-white rounded-md"
+        className="relative grid sm:grid-cols-12 bg-white rounded-md xl:max-w-6xl	lg:max-w-4xl md:max-w-2xl sm:max-w-xl w-full h-full sm:h-auto justify-center"
         onClick={handleModalClick}
       >
-        <div className="modal-close bg-amber-400 hover:bg-amber-600 flex justify-center items-center rounded-full">
+        <div className="modal-close bg-amber-400 hover:bg-amber-600 flex justify-center items-center rounded-full z-10">
           <Image
             src="/images/xmark-solid.svg"
             alt="search"
@@ -87,17 +87,30 @@ const PokemonDataModal: React.FC<ModalProps> = ({
             height={25}
             onClick={handleCloseClick}
           />
-        </div>
-        <div className="modal-body col-span-4">
-          <div className="flex h-full items-center relative">
+          <div className="sm:hidden">
             <FavoriteButton
               name={pokemonData?.name || ""}
               favoritedPokemon={favoritedPokemon}
               onFavoriteClick={onFavoriteClick}
-              className="sm:mr-5"
-              width={50}
-              height={50}
+              className="mt-14"
+              width={100}
+              height={100}
             />
+          </div>
+        </div>
+        <div className="modal-body sm:col-span-4 sm:w-full">
+          <div className="flex h-full items-center relative">
+            <div className="hidden sm:block">
+              <FavoriteButton
+                name={pokemonData?.name || ""}
+                favoritedPokemon={favoritedPokemon}
+                onFavoriteClick={onFavoriteClick}
+                className="sm:mr-5 p-0"
+                width={50}
+                height={50}
+              />
+            </div>
+
             <div className="flex flex-col items-center py-3">
               <Image
                 src={
@@ -116,7 +129,7 @@ const PokemonDataModal: React.FC<ModalProps> = ({
             </div>
           </div>
         </div>
-        <div className="col-span-8 p-10 bg-slate-200 rounded-md">
+        <div className="sm:col-span-8 p-10 bg-slate-200 rounded-md">
           <h1>Stats</h1>
           {renderData()}
         </div>
