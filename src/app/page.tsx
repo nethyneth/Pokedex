@@ -8,6 +8,7 @@ import PokemonList from "./components/PokemonList";
 import Spinner from "./components/Spinner";
 import useAllPokemonData from "./utils/useAllPokemonData";
 import usePokemonData from "./utils/usePokemonData";
+import ScrollToTopButton from "./components/ScrollToTopButton";
 
 const Home = () => {
   const [filter, setFilter] = useState<string[]>([]);
@@ -145,6 +146,7 @@ const Home = () => {
           }}
         />
       </div>
+      <ScrollToTopButton />
     </main>
   );
 };
