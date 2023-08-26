@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
-import { fetchPokemon } from "./api";
-import { Pokemon } from "./types";
 import { AxiosError } from "axios";
+import { useEffect, useState } from "react";
+import { fetchPokemon } from "./api";
 
 const useAllPokemonData = () => {
   const [allPokemonData, setAllPokemonData] = useState([]);
@@ -11,19 +10,20 @@ const useAllPokemonData = () => {
 
   useEffect(() => {
     const fetchPokemonData = async () => {
-      setAllPokemonDataloading(true);
-      setAllPokemonDataApiError(undefined);
       try {
+        setAllPokemonDataloading(true);
+        setAllPokemonDataApiError(undefined);
+
         const data = await fetchPokemon();
         const dataWithId = data.results.map((pokemon: any) => {
           const id = pokemon.url.split("/")[6];
           return { ...pokemon, id };
         });
-        setAllPokemonData(dataWithId);
 
-        setAllPokemonDataloading(false);
+        setAllPokemonData(dataWithId);
       } catch (error) {
         setAllPokemonDataApiError(error as AxiosError);
+      } finally {
         setAllPokemonDataloading(false);
       }
     };

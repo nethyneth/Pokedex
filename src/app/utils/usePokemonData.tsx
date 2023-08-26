@@ -6,39 +6,33 @@ import { AxiosError } from "axios";
 const usePokemonData = (filter: string[]) => {
   const [pokemonData, setPokemonData] = useState<Pokemon[]>([]);
   const [pokemonDataLoading, setPokemonDataLoading] = useState(false);
-  const [pokemonDataApiError, setPokemonDataApiError] = useState<AxiosError>();
+  const [pokemonDataApiError, setPokemonDataApiError] = useState<
+    AxiosError | undefined
+  >();
 
   const fetchPokemonData = async (filter: string[]) => {
     setPokemonDataLoading(true);
     setPokemonDataApiError(undefined);
+
     try {
-      if (filter.length > 0) {
-        const data = await Promise.all(
-          filter.map(async pokemon => {
-            try {
-              const pokemonRecord = await fetchPokemon(pokemon);
-              return pokemonRecord;
-            } catch (error: any) {
-              console.error(
-                `Error fetching ${pokemon}: ${error.response.data}`
-              );
-              return null;
-            }
-          })
-        );
-        const filteredData = data.filter(
-          pokemonRecord => pokemonRecord !== null
-        );
+      const dataPromises = filter.map(async pokemon => {
+        try {
+          return await fetchPokemon(pokemon);
+        } catch (error: any) {
+          console.error(`Error fetching ${pokemon}: ${error.response?.data}`);
+          return null;
+        }
+      });
 
-        filteredData.sort((a, b) => a.id - b.id);
+      const data = await Promise.all(dataPromises);
+      const filteredData = data.filter(pokemonRecord => pokemonRecord !== null);
 
-        setPokemonData(filteredData);
-      } else {
-        setPokemonData([]);
-      }
-      setPokemonDataLoading(false);
+      filteredData.sort((a, b) => a.id - b.id);
+
+      setPokemonData(filteredData);
     } catch (error) {
       setPokemonDataApiError(error as AxiosError);
+    } finally {
       setPokemonDataLoading(false);
     }
   };
@@ -51,8 +45,8 @@ const usePokemonData = (filter: string[]) => {
     pokemonData,
     pokemonDataLoading,
     pokemonDataApiError,
-    refetchPokemonData: (filter: string[]) => {
-      fetchPokemonData(filter);
+    refetchPokemonData: (newFilter: string[]) => {
+      fetchPokemonData(newFilter);
     },
   };
 };

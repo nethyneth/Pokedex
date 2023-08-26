@@ -1,6 +1,6 @@
+import React from "react";
 import Image from "next/image";
 import "./favorite-button.css";
-import { useEffect, useState } from "react";
 
 interface FavoriteButtonProps {
   name: string;
@@ -11,29 +11,26 @@ interface FavoriteButtonProps {
   onFavoriteClick: (name: string) => void;
 }
 
-const FavoriteButton = ({
+const FavoriteButton: React.FC<FavoriteButtonProps> = ({
   name,
-  height,
-  width,
-  className,
+  height = 30,
+  width = 30,
+  className = "",
   favoritedPokemon,
   onFavoriteClick,
 }: FavoriteButtonProps) => {
+  const isFavorited = favoritedPokemon.includes(name);
+  const heartIconSrc = isFavorited
+    ? "/images/heart-filled.svg"
+    : "/images/heart-empty.svg";
+
+  const handleClick = () => {
+    onFavoriteClick(name);
+  };
+
   return (
-    <div
-      className={`favorite-button ${className ?? ""}`}
-      onClick={() => onFavoriteClick(name)}
-    >
-      <Image
-        src={
-          favoritedPokemon.includes(name)
-            ? "/images/heart-filled.svg"
-            : "/images/heart-empty.svg"
-        }
-        width={width ?? 30}
-        height={height ?? 30}
-        alt={"favorite"}
-      />
+    <div className={`favorite-button ${className}`} onClick={handleClick}>
+      <Image src={heartIconSrc} width={width} height={height} alt="favorite" />
     </div>
   );
 };

@@ -1,8 +1,6 @@
-import { Pokemon } from "@/app/utils/types";
-import Image from "next/image";
-import { padNumberToFourDigits } from "../../utils/utils";
+import React, { useEffect, useState } from "react";
 import PokemonCard from "../PokemonCard";
-import { useEffect, useState } from "react";
+import { Pokemon } from "@/app/utils/types";
 
 interface PokemonListProps {
   data: Pokemon[];
@@ -11,7 +9,7 @@ interface PokemonListProps {
   onClick: (pokemonName: string) => void;
 }
 
-const PokemonList = ({
+const PokemonList: React.FC<PokemonListProps> = ({
   data,
   favoritedPokemon,
   onClick,
@@ -31,22 +29,22 @@ const PokemonList = ({
     setDisplayCount(displayCount + 10);
   };
 
+  const renderedPokemonCards = data
+    .slice(0, displayCount)
+    .map(pokemon => (
+      <PokemonCard
+        data={pokemon}
+        favoritedPokemon={favoritedPokemon}
+        key={pokemon.id}
+        onClick={handlePokemonSelected}
+        onFavoriteClick={onFavoriteClick}
+      />
+    ));
+
   return (
     <div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6">
-        {data.slice(0, displayCount).map(pokemon => (
-          <PokemonCard
-            data={pokemon}
-            favoritedPokemon={favoritedPokemon}
-            key={pokemon.id}
-            onClick={name => {
-              handlePokemonSelected(name);
-            }}
-            onFavoriteClick={name => {
-              onFavoriteClick(name);
-            }}
-          />
-        ))}
+        {renderedPokemonCards}
         {data.length > displayCount && (
           <div className="flex justify-center items-center">
             <button

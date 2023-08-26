@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { fuzzySearch } from "@/app/utils/utils";
 
@@ -8,14 +8,20 @@ interface InputFieldProps {
   allPokemonData: never[];
 }
 
-const InputField = ({ onSubmit, onError, allPokemonData }: InputFieldProps) => {
+const InputField: React.FC<InputFieldProps> = ({
+  onSubmit,
+  onError,
+  allPokemonData,
+}: InputFieldProps) => {
   const [userInput, setUserInput] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
     if (userInput) {
       const fuzzyRes = fuzzySearch(allPokemonData, userInput);
       const fuzzyList = fuzzyRes.map(item => item.name);
+
       if (fuzzyList.length === 0) {
         onError("Pokémon not found");
       } else {

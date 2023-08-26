@@ -1,7 +1,8 @@
-import { Pokemon } from "@/app/utils/types";
+import React from "react";
 import Image from "next/image";
 import { padNumberToFourDigits } from "../../utils/utils";
 import FavoriteButton from "../FavoriteButton";
+import { Pokemon } from "@/app/utils/types";
 
 interface PokemonCardProps {
   data: Pokemon;
@@ -10,26 +11,30 @@ interface PokemonCardProps {
   onFavoriteClick: (name: string) => void;
 }
 
-const PokemonCard = ({
+const PokemonCard: React.FC<PokemonCardProps> = ({
   data,
   favoritedPokemon,
   onClick,
   onFavoriteClick,
 }: PokemonCardProps) => {
+  const handleFavoriteClick = () => {
+    onFavoriteClick(data.name);
+  };
+
+  const handleCardClick = () => {
+    onClick(data.name);
+  };
+
   return (
     <div key={data.id} className="relative bg-white rounded-md">
       <FavoriteButton
         name={data.name}
         favoritedPokemon={favoritedPokemon}
-        onFavoriteClick={name => {
-          onFavoriteClick(name);
-        }}
+        onFavoriteClick={handleFavoriteClick}
       />
       <div
         className="flex flex-col items-center py-3"
-        onClick={() => {
-          onClick(data.name);
-        }}
+        onClick={handleCardClick}
       >
         <Image
           src={data.sprites.other["official-artwork"].front_default}

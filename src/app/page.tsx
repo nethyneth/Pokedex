@@ -16,14 +16,17 @@ const Home = () => {
   const [selectedPokemon, setSelectedPokemon] = useState<string>("");
   const [showPokemonDataModal, setShowPokemonDataModal] = useState(false);
   const [initialLoading, setInitialLoading] = useState<boolean>(true);
+
   const { allPokemonData, allPokemonDataloading, allPokemonDataApiError } =
     useAllPokemonData();
+
   const {
     pokemonData,
     refetchPokemonData,
     pokemonDataLoading,
     pokemonDataApiError,
   } = usePokemonData(filter);
+
   const loading = allPokemonDataloading || pokemonDataLoading || initialLoading;
 
   const fetchFavorites = () => {
@@ -40,10 +43,9 @@ const Home = () => {
   };
 
   const init = async () => {
-    await fetchFavorites().then(res => {
-      setFilter(res as string[]);
-      setInitialLoading(false);
-    });
+    const favorites = await fetchFavorites();
+    setFilter(favorites as string[]);
+    setInitialLoading(false);
   };
 
   const handlePokemonSelected = (pokemonName: string) => {
@@ -56,16 +58,12 @@ const Home = () => {
   };
 
   const handleFavoriteClick = (name: string) => {
-    if (favoritedPokemon.includes(name)) {
-      const filteredFavorites = favoritedPokemon.filter(
-        pokemonId => pokemonId !== name
-      );
-      localStorage.setItem("favorites", JSON.stringify(filteredFavorites));
-    } else {
-      const updatedFavorites = [...favoritedPokemon, name];
-      localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
-    }
-    fetchFavorites();
+    const updatedFavorites = favoritedPokemon.includes(name)
+      ? favoritedPokemon.filter(pokemonId => pokemonId !== name)
+      : [...favoritedPokemon, name];
+
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+    setFavoritedPokemon(updatedFavorites);
   };
 
   const handleShowFavorites = () => {
@@ -100,7 +98,7 @@ const Home = () => {
       {showPokemonDataModal && (
         <PokemonDataModal
           onClose={() => setShowPokemonDataModal(false)}
-          onfavoriteClick={name => {
+          onFavoriteClick={name => {
             handleFavoriteClick(name);
           }}
           pokemon={selectedPokemon}
