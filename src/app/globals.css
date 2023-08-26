@@ -2,7 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "Lato-Regular";
+  src: url("/fonts/Lato-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Lato-Bold";
+  src: url("/fonts/Lato-Bold.ttf");
+}
+
 body {
   color: #0f172a;
   background: #fde68a;
+}
+
+h1 {
+  font-family: "Lato-Bold";
+  font-size: 48px;
+}
+
+.xlTitle {
+  font-family: "Lato-Regular";
+  font-size: 64px;
+}
+
+p {
+  font-family: "Lato-Regular";
+  font-size: 20px;
 }
